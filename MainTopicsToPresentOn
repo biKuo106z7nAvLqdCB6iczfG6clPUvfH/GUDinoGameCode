@@ -1,0 +1,6 @@
+objects
+variables
+functions
+sprites
+collisions/hitboxes
+loops -> game() / for() (for loops are a hard topic)
