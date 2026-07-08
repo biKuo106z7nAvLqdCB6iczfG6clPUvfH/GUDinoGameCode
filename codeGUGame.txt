@@ -1,0 +1,138 @@
+var groundY = height - 100;        
+var playerWidth = 40;
+var playerStandHeight = 60;
+var playerDuckHeight = 30;
+var playerColor = "ForestGreen";
+var cactusColor = "DarkGreen";
+var birdColor = "SaddleBrown";
+var birdFlyGap = 40;               
+var birdHeight = 30;
+var gravity = 0.9;
+var jumpSpeed = -16;
+var startSpeed = 7;               
+var player = {
+  x: 60,
+  y: groundY - playerStandHeight,
+  width: playerWidth,
+  height: playerStandHeight,
+  velocityY: 0,
+  isDucking: false
+};
+var obstacles = [];      
+var spawnTimer = 60;    
+var speed = startSpeed;
+var score = 0;
+var gameOver = false;
+var groundScroll = 0;    
+function Cactus(x) {
+  this.type = "cactus";
+  this.x = x;
+  this.width = 25;
+  this.height = 45;
+  this.y = groundY - this.height;     
+  this.color = cactusColor;
+}
+function Bird(x) {
+  this.type = "bird";
+  this.x = x;
+  this.width = 34;
+  this.height = birdHeight;
+  this.y = groundY - birdFlyGap - birdHeight;   
+  this.color = birdColor;
+}
+noStroke();                
+background("SkyBlue");      
+function loop() {
+  clear();                 
+  if (!gameOver) {
+    handleInput();
+    updatePlayer();
+    updateObstacles();
+    checkCollisions();
+    score = score + 0.2;                   
+    speed = startSpeed + score / 300;        
+  } else if (keyWentDown(32)) {
+    resetGame();
+  }
+  drawGround();
+  drawPlayer();
+  for (var i = 0; i < obstacles.length; i++) {
+    drawObstacle(obstacles[i]);
+  }
+  drawScore();
+}
+function handleInput() {
+  var onGround = player.y >= groundY - player.height;
+  if ((keyWentDown(32) || keyWentDown(UP_ARROW)) && onGround && !player.isDucking) {
+    player.velocityY = jumpSpeed;
+  }
+  player.isDucking = keyIsDown(DOWN_ARROW);
+}
+function updatePlayer() {
+   if (player.isDucking){player.height = playerDuckHeight} else{player.height = playerStandHeight}
+  player.velocityY = player.velocityY + gravity;
+  player.y = player.y + player.velocityY;
+  if (player.y > groundY - player.height) {
+    player.y = groundY - player.height;
+    player.velocityY = 0;
+  }
+}
+function updateObstacles() {
+ for (var i = 0; i < obstacles.length; i++) {
+    obstacles[i].x = obstacles[i].x - speed;
+  }
+  while (obstacles.length > 0 && obstacles[0].x + obstacles[0].width < 0) {
+    obstacles.shift();
+  }
+  spawnTimer = spawnTimer - 1;
+  if (spawnTimer <= 0) {
+    if (random(0, 1) < 0.7) {
+      obstacles.push(new Cactus(width));
+    } else {
+      obstacles.push(new Bird(width));
+    }
+    spawnTimer = random(50, 100);
+  }
+}
+function checkCollisions() {
+  for (var i = 0; i < obstacles.length; i++) {
+    var o = obstacles[i];
+    if (collisionRectRect(player.x, player.y, player.width, player.height,o.x, o.y, o.width, o.height)) {
+      gameOver = true;
+    }
+  }
+}
+function resetGame() {
+  obstacles = [];
+  spawnTimer = 60;
+  speed = startSpeed;
+  score = 0;
+  gameOver = false;
+  player.y = groundY - playerStandHeight;
+  player.velocityY = 0;
+}
+function drawGround() {
+  fill("SaddleBrown");
+  rect(0, groundY, width, 4);
+  groundScroll = groundScroll - speed;
+  if (groundScroll < -40) groundScroll = 0;
+  fill("Sienna");
+  for (var x = groundScroll; x < width; x = x + 40) {
+    rect(x, groundY + 4, 20, 4);
+  }
+}
+function drawPlayer() {
+  fill(playerColor);
+  rect(player.x, player.y, player.width, player.height);
+}
+function drawObstacle(o) {
+  fill(o.color);
+  rect(o.x, o.y, o.width, o.height);
+}
+function drawScore() {
+  fill("Black");
+  text("Score: " + Math.floor(score), 20, 30);
+  if (gameOver) {
+    text("GAME OVER - press SPACE to try again", width / 2 - 150, height / 2);
+  }
+}
