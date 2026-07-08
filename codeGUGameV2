@@ -1,15 +1,75 @@
+/* For JI's
+Remove this comment when you are done with uploading the code into a shortened link
+I left comments that explain the code, along with some that I marked to be an example of a particular
+type of coding technique (ex. Loops, functions, etc.)
+Keywords to look for:
+
+function -> function
+for -> for loop
+while -> while loop
+var -> variable
+if -> if statement
+else -> else statement
+this.(something) -> Accesses the variable in the object (like *this* cactus)
+o. -> Accesses the variable of the o object that was passed in to the function or defined (should be labeled)
+|| -> OR logic gate
+&& -> AND logic gate
+functionname(); -> Function call (like resetGame(); )
+! -> NOT logic gate
+[] -> Array accessing (obstacle array)
+== -> Check for equality
+= -> Set left equal the right
+
+Please send the link of the presentation before the end of the day so that I can review it myself as well
+P.S. If you could write who is doing what section on the powerpoint, that would be great!
+Please message me if you have any questions.
+P.P.S There are comments both for you guys and the campers, you can just remove this large section
+starting from line 1 and ending here. Thanks!
+*/
+
+
+
+
+
+/* For campers
+PLEASE READ THIS IN FULL BEFORE CHANGING ANY CODE
+
+I highlighted some of the code you can change and the rest with 'DO NOT TOUCH'.
+Before changing the code, read the comments above the line(s), they will explain what you should do
+or not do. If you have any questions about changing code, feel free to ask a JI!
+
+*/
+
+//Setup, variable use
+//Ground, player dimensions (internal hitbox)
+
+//DO NOT TOUCH UNLESS YOU KNOW EXACTLY WHAT YOU ARE DOING
+
 var groundY = height - 100;        
 var playerWidth = 80;
 var playerStandHeight = 90;
-var playerDuckHeight = 50;
+
+// END OF DO NOT TOUCH
+
+//Player DuckHeight is only useful is ducking is enabled and sprites are disabled
+//var playerDuckHeight = 50;
+//Color of internal hitbox, most likely won't be seen
 var playerColor = "ForestGreen";
 var cactusColor = "DarkGreen";
 var birdColor = "SaddleBrown";
+
+//BirdFlyGap is the space in between ground and bird, birdHeight is the height of the hitbox.
 var birdFlyGap = 55;               
 var birdHeight = 68;
+
+//Changes jump. gravity defines how hard the dino is pulled downwards, jumpSpeed is how hard he jumps.
 var gravity = 0.7;
-var jumpSpeed = -16;
-var startSpeed = 7;               
+var jumpSpeed = -18;
+//startSpeed changes the speed of the obstacles
+var startSpeed = 7;  
+
+//player initialization 
+//DO NOT TOUCH
 var player = {
   x: 60,
   y: groundY - playerStandHeight,
@@ -18,12 +78,19 @@ var player = {
   velocityY: 0,
   isDucking: false
 };
+
+//More initialization
 var obstacles = [];      
 var spawnTimer = 60;    
 var speed = startSpeed;
 var score = 0;
 var gameOver = false;
 var groundScroll = 0;    
+
+
+//Example of object/function use
+//Cactus definition
+
 function Cactus(x) {
   this.type = "cactus";
   this.x = x;
@@ -32,6 +99,9 @@ function Cactus(x) {
   this.y = groundY - this.height;     
   this.color = cactusColor;
 }
+
+//Bird definition
+
 function Bird(x) {
   this.type = "bird";
   this.x = x;
@@ -40,8 +110,16 @@ function Bird(x) {
   this.y = groundY - birdFlyGap - birdHeight;   
   this.color = birdColor;
 }
-noStroke();                
-background("Desert");      
+
+noStroke();  
+
+//END OF DO NOT TOUCH
+
+//Background setting, feel free to change
+background("Desert");    
+
+//Main loop, DO NOT TOUCH ANYTHING BELOW THIS UNLESS IT SAYS OTHERWISE
+
 function loop() {
   clear();                 
   if (!gameOver) {
@@ -60,48 +138,85 @@ function loop() {
     drawObstacle(obstacles[i]);
   }
   drawScore();
+  
 }
+//function for detecting input from keyboard
 function handleInput() {
   var onGround = player.y >= groundY - player.height;
+  //space/up arrow
   if ((keyWentDown(32) || keyWentDown(UP_ARROW)) && onGround && !player.isDucking) {
     player.velocityY = jumpSpeed;
   }
-  //player.isDucking = keyIsDown(DOWN_ARROW);
+  /*
+  If not using sprites for the player (no dino), 
+  you can ignore the DO NOT TOUCH and uncomment the line below (remove the // )
+  Duck functionality
+  player.isDucking = keyIsDown(DOWN_ARROW);
+  */
 }
+//Moves player
 function updatePlayer() {
    if (player.isDucking){player.height = playerDuckHeight} else{player.height = playerStandHeight}
   player.velocityY = player.velocityY + gravity;
   player.y = player.y + player.velocityY;
+  //if player is on ground logic
   if (player.y > groundY - player.height) {
     player.y = groundY - player.height;
     player.velocityY = 0;
   }
+  
 }
+//Obstacle logic
 function updateObstacles() {
+    //for loop example
  for (var i = 0; i < obstacles.length; i++) {
+     //moves all obstacles
     obstacles[i].x = obstacles[i].x - speed;
   }
+  //if any obstacle has left the screen on the left, they are removed.
+  //while loop example
   while (obstacles.length > 0 && obstacles[0].x + obstacles[0].width < 0) {
     obstacles.shift();
   }
+  //spawning new obstacle logic
+ 
   spawnTimer = spawnTimer - 1;
   if (spawnTimer <= 0) {
-    if (random(0, 1) < 0.7) {
+      
+      //Campers! You can ignore the DO NOT TOUCH warning for the lower line of code!
+      //Determines likelyhood of spawning
+      //0.7 = 70%
+      
+    if (random(0, 1) < 0.7) 
+    
+    //the line of code right above this!
+    
+    {
       obstacles.push(new Cactus(width));
     } else {
       obstacles.push(new Bird(width));
     }
+    //same for this one
+    //Controls time to spawn (in frames)
     spawnTimer = random(50, 100);
+    //the one right above this comment, spawnTimer = ...
   }
 }
+//checks player/cactus player/bird collisions using rectangles
+//Uses for loop to read every obstacle in obstacles[] (array), for every obstacle it checks its collisions
+//Anything that is o.something is using an obstacle's data
 function checkCollisions() {
+    //for loop
   for (var i = 0; i < obstacles.length; i++) {
+      //reads index i of array
     var o = obstacles[i];
+    //checks collisions
     if (collisionRectRect(player.x, player.y, player.width, player.height,o.x, o.y, o.width, o.height)) {
       gameOver = true;
     }
   }
 }
+//If space is pressed after death, reinitializes some variables
 function resetGame() {
   obstacles = [];
   spawnTimer = 60;
@@ -111,9 +226,13 @@ function resetGame() {
   player.y = groundY - playerStandHeight;
   player.velocityY = 0;
 }
+
+//Draws the ground.
 function drawGround() {
+    //these 2 lines of code below have no visible result if there is a sprite for the ground.
   fill("SaddleBrown");
   rect(0, groundY, width, 4);
+  
   groundScroll = groundScroll - speed;
   if (groundScroll < -40) groundScroll = 0;
   fill("Sienna");
@@ -121,28 +240,53 @@ function drawGround() {
     rect(x, groundY + 4, 20, 4);
   }
   for (var i = 0; i <= width/64; i++){
+      //I encourage you to change the 'desert02' part of the lower line of code if you want to change 
+      //the ground. Don't change anything else, it will look broken
       ground = sprite('desert02',i*75, groundY+50, 0.75)
       ground.life = 1
   }
 }
+//Draws player
 function drawPlayer() {
+    
+  //To see the hitbox of the player, uncomment the lower two comments!
+  
   //fill(playerColor);
   //rect(player.x, player.y, player.width, player.height);
+  
+  //You may try to change the 'dino.run' part of the line of code below to change the sprite (picture)
+  //of the player. However, it may cause the hitboxes to be wonky.
+  
   let playersprite = sprite('dino.run', player.x+65, player.y+45, 0.25); 
   playersprite.life = 1
 }
+//Draws cacti and birds
 function drawObstacle(o) {
   fill(o.color);
+  
+  //Uncomment below to see hitboxes
   //rect(o.x, o.y, o.width, o.height);
+  
+  //Cactus logic
+  
   if (o.type == 'cactus'){
+      
+      //You may try to change the cactus image, ('cactus') part, but be warned that you will then
+      //need to fix the hitboxes, which you can do by uncommenting the rect(...) command above
+      //Ask a JI for help if you want to try to change the cactus sprite / size
+      //If you want to change size, change the 0.25 part (4th part)
+      
       let cactus = sprite('cactus',o.x+40,o.y+55,0.25)
       cactus.life = 1}
+      
   else{
+      //Same warning for cactus.
       let bird = sprite('TileChicken', o.x+34,o.y+34,0.5)
       bird.life = 1
   }
 
 }
+//Draws the score on the screen, also handles game over text.
 function drawScore() {
   fill("Black");
   text("Score: " + Math.floor(score), 20, 30);
