@@ -25,6 +25,7 @@ P.S. If you could write who is doing what section on the powerpoint, that would 
 Please message me if you have any questions.
 P.P.S There are comments both for you guys and the campers, you can just remove this large section
 starting from line 1 and ending here. Thanks!
+
 */
 
 
@@ -32,6 +33,7 @@ starting from line 1 and ending here. Thanks!
 
 
 /* For campers
+
 PLEASE READ THIS IN FULL BEFORE CHANGING ANY CODE
 
 I highlighted some of the code you can change and the rest with 'DO NOT TOUCH'.
@@ -39,6 +41,28 @@ Before changing the code, read the comments above the line(s), they will explain
 or not do. If you have any questions about changing code, feel free to ask a JI!
 
 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //Setup, variable use
 //Ground, player dimensions (internal hitbox)
