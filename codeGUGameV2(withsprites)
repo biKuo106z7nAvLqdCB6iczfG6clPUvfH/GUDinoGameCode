@@ -1,5 +1,14 @@
 /* For JI's
-Remove this comment when you are done with uploading the code into a shortened link
+
+I'm thinking we spend some time on V1, and then allow the kids to move on to V2.
+
+
+TinyURL for V1:
+https://tinyurl.com/37r6km3r
+TinyURL for V2:
+https://tinyurl.com/avh2au2x
+
+
 I left comments that explain the code, along with some that I marked to be an example of a particular
 type of coding technique (ex. Loops, functions, etc.)
 Keywords to look for:
@@ -23,8 +32,6 @@ functionname(); -> Function call (like resetGame(); )
 Please send the link of the presentation before the end of the day so that I can review it myself as well
 P.S. If you could write who is doing what section on the powerpoint, that would be great!
 Please message me if you have any questions.
-P.P.S There are comments both for you guys and the campers, you can just remove this large section
-starting from line 1 and ending here. Thanks!
 
 */
 
